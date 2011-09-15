@@ -139,7 +139,7 @@ class PayPalPro(object):
         if form.is_valid():
             success = form.process(self.request, self.item)
             if success:
-                payment_was_successful.send(sender=self.item)
+                payment_was_successful.send(sender=self.item, ppp=self)
                 return HttpResponseRedirect(self.success_url)
             else:
                 self.context['errors'] = self.errors['processing']
@@ -196,7 +196,7 @@ class PayPalPro(object):
             success = wpp.doExpressCheckoutPayment(self.item)
 
         if success:
-            payment_was_successful.send(sender=self.item)
+            payment_was_successful.send(sender=self.item, ppp=self)
             return HttpResponseRedirect(self.success_url)
         else:
             self.context['errors'] = self.errors['processing']
